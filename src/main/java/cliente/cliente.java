@@ -1,5 +1,6 @@
 package cliente;
 
+import algoritmos.aes;
 import algoritmos.hash;
 import herramientas.generadorClave;
 import herramientas.paquete;
@@ -10,9 +11,13 @@ import java.math.BigInteger;
 
 public class cliente {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
+        String key = "Bar12345Bar12345"; // 128 bit key
+        String initVector = "RandomInitVector"; // 16 bytes IV
+
         //Este será Bob...
         BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
         hash hashear = new hash();
+        aes alg = new aes();
 
         System.out.println("Introduzca el numero primo:");
         BigInteger modulo=new BigInteger(br.readLine());
@@ -29,9 +34,13 @@ public class cliente {
         generadorClave generador = new generadorClave(R1,exponente,modulo);
         BigInteger k2 = generador.generarClave();
 
-        System.out.println("Llave calculada desde el lado de Bob: "+k2);
+        String msjDescifrado = alg.decrypt(key, initVector, pkt.getMensajeSHA());
+
+//        System.out.println("Llave calculada desde el lado de Bob: "+k2);
+        System.out.println("Llave calculada desde el lado de Bob: "+key);
         System.out.println("Mensaje de Alicia: "+pkt.getMensajeOriginal());
-        System.out.println("SHA256 de Alicia: " +pkt.getMensajeSHA());
+        System.out.println("SHA256 de Alicia con AES: " +pkt.getMensajeSHA());
+        System.out.println("SHA256 de Alicia sin AES(Descifrado): " +msjDescifrado);
         System.out.println("Mensaje de Alicia con SHA256 de Bob: "+hashear.generateHash256(pkt.getMensajeOriginal()));
     }
 

@@ -25,7 +25,7 @@ public class aes {
         return null;
     }
 
-    public static String decrypt(String key, String initVector, String encrypted) {
+    public String decrypt(String key, String initVector, String encrypted) {
         try {
             IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
             SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");

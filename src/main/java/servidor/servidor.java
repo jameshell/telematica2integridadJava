@@ -1,5 +1,6 @@
 package servidor;
 
+import algoritmos.aes;
 import algoritmos.hash;
 import herramientas.generadorClave;
 import herramientas.paquete;
@@ -12,9 +13,13 @@ import java.net.InetAddress;
 
 public class servidor{
     public static void main(String[] args) throws IOException {
+        String key = "Bar12345Bar12345"; // 128 bit key
+        String initVector = "RandomInitVector"; // 16 bytes IV
+
         //Esta será Alice...
         BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
         hash hashear = new hash();
+        aes alg = new aes();
 
         InetAddress inetAddress = InetAddress.getLocalHost();
 
@@ -36,9 +41,12 @@ public class servidor{
         System.out.println("Enter your message: ");
         String msg = br.readLine();
 
-        String hashedMsg = hashear.generateHash256(msg);
+        System.out.println("Clave enviada a traves de Diffie: "+key);
 
-        enviarInfo(R1, 4000, msg,hashedMsg);
+        String hashedMsg = hashear.generateHash256(msg);
+        String hashedMsgAES = alg.encrypt(key, initVector, hashedMsg);
+
+        enviarInfo(R1, 4000, msg,hashedMsgAES);
 
     }
 
