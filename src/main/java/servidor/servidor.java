@@ -44,9 +44,8 @@ public class servidor{
         System.out.println("Clave enviada a traves de Diffie: "+key);
 
         String hashedMsg = hashear.generateHash256(msg);
-        String hashedMsgAES = alg.encrypt(key, initVector, hashedMsg);
-
-        enviarInfo(R1, 4000, msg,hashedMsgAES);
+        String encryptedMsg = alg.encrypt(key, initVector, hashedMsg);
+        enviarInfo(R1, 4000, msg,hashedMsg);
 
     }
 
